@@ -62,7 +62,7 @@ PRICE_CACHED_INPUT_PER_TOKEN = MODEL_INFO[MODEL_KEY]["price_per_1M_cached_input"
 
 csv_path = os.environ.get("PERSONA_PROFILE_CSV", str(GENERATION_DATA / "persona_profile_600_sampled.csv"))
 big5_questions_path = os.environ.get("PERSONA_BIG5_QUESTIONS", str(GENERATION_DATA / "big_five.txt"))
-situation_path = os.environ.get("PERSONA_SITUATION_JSON", str(GENERATION_DATA / "simulate_descriptions_study1_enriched.json"))
+situation_path = os.environ.get("PERSONA_SITUATION_JSON", str(GENERATION_DATA / "simulate_descriptions_study1.json"))
 facet_questions_path = os.environ.get("PERSONA_STATE_QUESTIONS", str(GENERATION_DATA / "state_personality_llm_questions.json"))
 llm_final_output_path = os.environ.get("PERSONA_SITUATION_FEATURES", str(GENERATION_DATA / "llm_final_output.csv"))
 output_all_file = str(GENERATION_OUTPUT / "simulation_output_all.jsonl")

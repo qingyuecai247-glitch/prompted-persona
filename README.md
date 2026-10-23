@@ -51,7 +51,7 @@ The example contains48 synthetic observations from12 simulated people and writes
 
 ## LLM data generation
 
-Persona construction and assessment are in [01_persona](01_persona/README.md). Situation-conditioned response generation, local model serving and optional description preprocessing are in [02_behavior_generation](02_behavior_generation/README.md). Install requirements-generation.txt for clients; GPU serving has separate requirements. Endpoints, credentials and input/output paths are configured by environment variables.
+Persona construction and assessment are in [01_persona](01_persona/README.md). Situation-conditioned response generation is in [02_behavior_generation](02_behavior_generation/README.md). Install requirements-generation.txt for generation clients. Endpoints, credentials and input/output paths are configured by environment variables.
 
 ## Organization
 
