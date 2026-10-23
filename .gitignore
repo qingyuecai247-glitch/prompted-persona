@@ -35,6 +35,3 @@ __pycache__/
 .RData
 .DS_Store
 
-# Study instruments and situation material
-04_sae/base_pipeline/data/*
-!04_sae/base_pipeline/data/README.md

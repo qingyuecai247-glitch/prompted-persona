@@ -1,1 +1,1 @@
-Study data are intentionally excluded. Use scripts/reproduce.py --data-root /path/to/reviewer_materials/code/data/raw. Human source: https://osf.io/4ps29/ (Study1). Confirm redistribution terms before public release.
+Study data are intentionally excluded. Use run.py --data-root /path/to/reviewer_materials/code/data/raw. Human source: https://osf.io/4ps29/ (Study1). Confirm redistribution terms before public release.

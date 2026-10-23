@@ -5,10 +5,10 @@ import os
 import unittest
 from unittest.mock import patch
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "config/paths.json").is_file())
 
 def load_generator():
-    spec = importlib.util.spec_from_file_location('response_generator', ROOT / '02_behavior_generation/layers-llm.py')
+    spec = importlib.util.spec_from_file_location('response_generator', ROOT / 'generation/responses.py')
     module = importlib.util.module_from_spec(spec)
     with patch.dict(os.environ, {'PERSONA_MODEL_SOURCE':'local','PERSONA_LLM_URL':'','AZURE_OPENAI_ENDPOINT':'','AZURE_OPENAI_API_KEY':''}):
         spec.loader.exec_module(module)

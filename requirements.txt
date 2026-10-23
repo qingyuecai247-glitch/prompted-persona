@@ -1,15 +1,1 @@
-# CPU analysis/plotting environment; compatibility ranges, not a frozen lockfile.
-numpy>=1.26,<3
-pandas>=2.2,<3
-scipy>=1.13,<2
-matplotlib>=3.8,<4
-seaborn>=0.13,<1
-scikit-learn>=1.4,<2
-statsmodels>=0.14,<1
-Pillow>=10,<13
-requests>=2.31,<3
-tqdm>=4.66,<5
-
-# Author Figure 6 vector editing and optional preview
-pypdf>=5
-pypdfium2>=4
+-r requirements/analysis.txt

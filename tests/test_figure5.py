@@ -4,8 +4,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / '03_behavior_analysis/figures/main/random_slope_figure5.py'
+ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "config/paths.json").is_file())
+SCRIPT = ROOT / 'figures/figure5.py'
 
 class Figure5Regression(unittest.TestCase):
     @classmethod

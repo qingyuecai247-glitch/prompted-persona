@@ -4,8 +4,8 @@ from pathlib import Path
 import unittest
 import numpy as np
 
-ROOT=Path(__file__).resolve().parents[1]
-spec=importlib.util.spec_from_file_location('cluster',ROOT/'03_behavior_analysis/statistics/geometry/cluster_figure2_centroids.py')
+ROOT=next(parent for parent in Path(__file__).resolve().parents if (parent / "config/paths.json").is_file())
+spec=importlib.util.spec_from_file_location('cluster',ROOT/'analysis/geometry.py')
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 
 class ClusterInference(unittest.TestCase):

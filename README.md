@@ -1,67 +1,84 @@
 # Prompted Persona
 
-Analysis and figure-generation code accompanying **Language model personas express traits but not human personality dynamics**.
+Code for **Language model personas express traits but not human personality dynamics**.
+
+## Four places to look
+
+| Folder | Purpose | Start here |
+| --- | --- | --- |
+| generation/ | Create personas and generate LLM questionnaire responses | generation/README.md |
+| analysis/ | Behavioural statistics: PCA geometry, factor structure, reliability and random slopes | geometry.py, factor_model.R, reliability.R, random_slopes.py |
+| sae/ | SAE validation/extraction, representations and interventions | pipeline.py, representations.py, interventions.py |
+| figures/ | Main figures and Supplementary plots | figure2.py through figure6.py; Figure4 is produced by analysis/reliability.R |
+
+**Use run.py at repository root to choose a task.** You do not need to navigate nested numbered directories.
 
 ## Setup
 
-Python3.11+ is recommended. Install the plotting/statistical dependencies:
+Python3.11+ recommended:
 
 ```sh
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
+python run.py --help
 ```
 
-For the synthetic example and Figure6d CPU statistics, the smaller requirements-sae-v7-cpu.txt is sufficient. R analyses use the packages listed in environment.yml.
+Optional client dependencies: requirements/generation.txt. NumPy/pandas-only statistics: requirements/sae_cpu.txt. R packages: requirements/environment.yml. Node dependencies in package.json are only needed for Figure3 PDF export.
 
-## Data
+## Generate data
 
-Study inputs and archived numerical tables are provided separately. Use --data-root for the raw analysis inputs and --reference-root for the reviewer archive's code/data/reference directory.
-
-Human reference: Kuper et al.(2024), https://doi.org/10.1037/pspp0000473 ; original study materials: https://osf.io/4ps29/ . Third-party data retain their original terms. This repository contains code and synthetic examples; study observations, questionnaires, situation datasets, original named personas and model weights are not included.
-
-## Figures
+Configure model endpoint/credentials and input/output locations with environment variables (see generation/README.md and .env.example), then run only the required stage:
 
 ```sh
-python scripts/reproduce.py figure2 --data-root /path/to/reviewer_archive/code/data/raw
-python scripts/reproduce.py figure3 --reference-root /path/to/reviewer_archive/code/data/reference
-python scripts/reproduce.py figure5 --reference-root /path/to/reviewer_archive/code/data/reference
-python scripts/reproduce.py figure6 --reference-root /path/to/reviewer_archive/code/data/reference
+python run.py generate-personas
+python run.py assess-traits
+python run.py generate-responses
 ```
 
-Use --output-root to choose an output directory. Figure3 produces SVG; PDF export additionally uses Node and package.json dependencies. Figure6 redraws numerical source tables. The figure commands and statistical commands are separate entry points.
+These stages invoke external models; installing dependencies and running statistical commands does not launch generation.
 
-## Statistical analyses
+## Reproduce figures
+
+Point to the separately supplied reviewer archive:
 
 ```sh
-python scripts/reproduce.py figure2-cluster --data-root /path/to/reviewer_archive/code/data/raw
-python scripts/reproduce.py figure6-v7-statistics --reference-root /path/to/reviewer_archive/code/data/reference
+python run.py figure2 --data-root /path/to/reviewer_archive/code/data/raw
+python run.py figure3 --reference-root /path/to/reviewer_archive/code/data/reference
+python run.py figure4 --data-root /path/to/reviewer_archive/code/data/raw --reference-root /path/to/reviewer_archive/code/data/reference
+python run.py figure5 --reference-root /path/to/reviewer_archive/code/data/reference
+python run.py figure6 --reference-root /path/to/reviewer_archive/code/data/reference
 ```
 
-Figure2 centroid inference uses person-cluster Wald statistics and 199,999 whole-person bootstrap draws (seed20261021). Figure6d uses three formal v7 intervention shards, 5,000 crossed-bootstrap draws (seed20260720). Outputs are written under outputs/statistics.
+Use --output-root to choose where results are written. Figure3 creates SVG; scripts/export_figure3.cjs additionally exports PDF/PNG.
 
-## Synthetic example
+## Reproduce statistical results
+
+```sh
+python run.py figure2-cluster --data-root /path/to/reviewer_archive/code/data/raw
+python run.py figure6-v7-statistics --reference-root /path/to/reviewer_archive/code/data/reference
+```
+
+Figure2 inference uses199,999 whole-person draws, seed20261021. Figure6d uses three formal v7 shards and5,000 crossed-bootstrap draws, seed20260720. Figure redraws and statistical computations are separate tasks. See docs/PAPER_CODE_MAP.md for detailed correspondence.
+
+## Try without study data
 
 ```sh
 python scripts/demo_cluster.py
 python -m unittest discover -s tests -p test_figure2_cluster.py -v
 ```
 
-The example contains48 synthetic observations from12 simulated people and writes outputs/demo_cluster/summary.json. It is an illustration of clustered mean uncertainty.
+The demo uses48 wholly synthetic observations from12 simulated people. Study observations, questionnaires, situation datasets, named personas and model weights are provided separately.
 
-## LLM data generation
+## Supporting folders
 
-Persona construction and assessment are in [01_persona](01_persona/README.md). Situation-conditioned response generation is in [02_behavior_generation](02_behavior_generation/README.md). Install requirements-generation.txt for generation clients. Endpoints, credentials and input/output paths are configured by environment variables.
+- data/: instructions for external raw and reference inputs.
+- config/: paths and Figure2 dataset mapping.
+- requirements/: analysis, generation and SAE CPU dependencies.
+- scripts/: small export/demo helpers.
+- tests/: offline checks.
+- examples/: synthetic input.
+- outputs/: generated results (ignored by Git).
+- docs/: paper-to-code map and environment/configuration notes.
 
-## Organization
-
-- 01_persona/: persona construction and assessment.
-- 02_behavior_generation/: response generation and supporting tools.
-- 03_behavior_analysis/: main and Supplementary statistical analyses and plots.
-- 04_sae/: formal representation and intervention analyses.
-- scripts/: command-line wrappers, example and figure export.
-- config/: portable paths and Figure2 dataset map.
-- examples/: synthetic demonstration input.
-- docs/PAPER_CODE_MAP.md: paper-to-code correspondence.
-
-Retained formal GPU scripts require model/SAE checkpoints and locally configured data paths. ./local_assets denotes a user-supplied local location. Full data access details should be supplied with the submission. License selection is pending author approval; see LICENSE_NOTICE.md.
+Human source: Kuper et al.(2024), https://doi.org/10.1037/pspp0000473 ; https://osf.io/4ps29/ . Third-party terms apply. Set service credentials and local assets yourself; no private server configuration is included. A project-wide code license remains pending author approval (LICENSE_NOTICE.md).

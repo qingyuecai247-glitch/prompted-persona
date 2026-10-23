@@ -7,8 +7,8 @@ import sys
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
-ENTRY = ROOT / 'scripts/reproduce.py'
+ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "config/paths.json").is_file())
+ENTRY = ROOT / 'run.py'
 
 class ReproductionRegression(unittest.TestCase):
     @unittest.skipUnless((ROOT / 'data/reference/analysis/results/factor_modularity_centered_diamonds_phi_medium/representative_factor_loadings.csv').exists(), 'Restore the separate reference-data archive to run the Figure3 regression.')
