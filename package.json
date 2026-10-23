@@ -1,0 +1,8 @@
+{
+  "name": "linguistic-persona-figure-export",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Optional SVG-to-PNG/PDF export for Figure 3",
+  "scripts": {"export:figure3": "node scripts/export_figure3.cjs"},
+  "dependencies": {"sharp": "^0.34.0", "pdf-lib": "^1.17.1"}
+}

@@ -1,0 +1,29 @@
+{
+  "DATASETS_RAW": {
+    "GPT-4o-mini": "simulation_output_flattened-gpt4omini.csv",
+    "GPT-5.2": "simulation_output_flattened-gpt52.csv",
+    "Qwen-2.5-7B": "simulation_output_flattened-qwen2.5-7b-instruct.csv",
+    "Qwen-2.5-14B": "simulation_output_flattened-qwen2.5-14b-instruct.csv",
+    "Qwen-2.5-32B": "simulation_output_flattened-qwen2.5-32b-instruct.csv",
+    "Deepseek-3.2": "simulation_output_flattened-deepseek3.2.csv",
+    "Grok-3": "simulation_output_flattened-grok3.csv",
+    "Llama-3.1-8B": "simulation_output_flattened_llama3.1-8b-instruct.csv",
+    "Phi-mini": "simulation_output_flattened-phi3-mini.csv",
+    "Phi-small": "simulation_output_flattened-phi3-small.csv",
+    "Phi-medium": "simulation_output_flattened-phi3-medium.csv"
+  },
+  "MODEL_DISPLAY_NAMES": {
+    "Human": "Human",
+    "GPT-4o-mini": "GPT-4o-mini",
+    "GPT-5.2": "GPT-5.2",
+    "Deepseek-3.2": "DeepSeek-3.2",
+    "Grok-3": "Grok-3",
+    "Llama-3.1-8B": "Llama-3.1-8B",
+    "Qwen-2.5-7B": "Qwen2.5-7B",
+    "Qwen-2.5-14B": "Qwen2.5-14B",
+    "Qwen-2.5-32B": "Qwen2.5-32B",
+    "Phi-mini": "Phi-3 mini",
+    "Phi-small": "Phi-3 small",
+    "Phi-medium": "Phi-3-medium"
+  }
+}

@@ -1,0 +1,40 @@
+# Credentials and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Data and generated artifacts
+data/raw/*
+!data/raw/README.md
+data/reference/*
+!data/reference/README.md
+outputs/*
+!outputs/.gitkeep
+*.sqlite*
+*.db
+*.pt
+*.pth
+*.safetensors
+*.pkl
+*.npy
+*.npz
+*.zip
+*.whl
+*.log
+*.pid
+# Runtimes and caches
+.venv/
+venv/
+envs/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.Rhistory
+.RData
+.DS_Store
+
+# Study instruments and situation material
+04_sae/base_pipeline/data/*
+!04_sae/base_pipeline/data/README.md

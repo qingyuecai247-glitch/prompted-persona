@@ -1,0 +1,5 @@
+{
+  "data_root": "data/raw",
+  "reference_root": "data/reference",
+  "output_root": "outputs"
+}

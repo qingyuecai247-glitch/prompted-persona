@@ -1,0 +1,26 @@
+name: linguistic-persona
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - statsmodels
+  - pillow
+  - requests
+  - tqdm
+  - r-base=4.4
+  - r-psych
+  - r-dplyr
+  - r-tidyr
+  - r-ggplot2
+  - r-patchwork
+  - r-scales
+  - r-matrix
+  - r-rcolorbrewer
+  - r-svglite
+  - r-ragg

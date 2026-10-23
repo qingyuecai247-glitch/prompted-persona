@@ -1,0 +1,3 @@
+# Minimal dependencies for figure6-v7-statistics only; compatibility ranges, not a lockfile.
+numpy>=1.26,<3
+pandas>=2.2,<4

@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying manuscript; repository DOI and publication details will be added when available."
+title: "Language model personas express traits but not human personality dynamics"
+type: software
+version: "0.1.0-review-preparation"
+authors:
+  - family-names: Cai
+    given-names: Qingyue
+  - family-names: Yong
+    given-names: Xixian
+  - family-names: Lian
+    given-names: Jianxun
+  - family-names: Jiang
+    given-names: Liming
+  - family-names: Zhou
+    given-names: Xiao
