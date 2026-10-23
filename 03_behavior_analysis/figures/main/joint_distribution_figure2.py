@@ -150,7 +150,7 @@ MODEL_DISPLAY_NAMES = {
 SMALL_PANEL_FACE = '#F8F8F8'
 SMALL_PANEL_EDGE = '#D9D9D9'
 
-# 深色 Big Five 颜色
+
 trait_colors = {
     'E': '#B67A00',
     'A': '#A95F00',
@@ -391,7 +391,7 @@ def add_trait_arrows(
             zorder=zorder
         )
 
-        # 小图调用时 outline_arrow=False，因此不会出现白色底
+        
         if outline_arrow and ann.arrow_patch is not None:
             ann.arrow_patch.set_path_effects([
                 pe.Stroke(
@@ -483,7 +483,7 @@ def add_centroid_label(ax, name, xy, color, offset=(0.20, 0.20)):
         annotation_clip=True,
     )
 
-    # 让模型文字与其引线都处于最上层
+    
     ann.set_zorder(260)
     if ann.arrow_patch is not None:
         ann.arrow_patch.set_zorder(255)
@@ -562,7 +562,7 @@ def clamp_annotations_to_axes(ax, annotations, pad_frac_x=0.048, pad_frac_y=0.05
         ty = min(max(ty, ymin), ymax)
         ann.set_position((tx, ty))
 
-        # clamp 后再次确认文字在最上层
+        
         ann.set_zorder(260)
         if ann.arrow_patch is not None:
             ann.arrow_patch.set_zorder(255)

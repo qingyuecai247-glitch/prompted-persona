@@ -1,11 +1,11 @@
 # ============================================================================
 # RQ1 reliability heatmaps
 #
-# 修改内容：
-# 1. Phi-medium 不再使用汇总表中的旧占位/NA记录。
-# 2. MODEL_FILES 中列出的模型全部从真实 CSV 重新计算，并覆盖汇总表旧结果。
-# 3. 如果真实 CSV 不存在、字段缺失或 Phi-medium 完全算不出结果，直接报错，
-#    不再静默生成占位结果。
+
+
+
+
+
 # ============================================================================
 
 project_lib <- Sys.getenv("PERSONA_R_LIBRARY", unset = file.path(getwd(), "R-library"))
@@ -25,7 +25,7 @@ library(tidyr)
 library(patchwork)
 library(RColorBrewer)
 
-# lme4 是计算随机斜率可靠性所必需的
+
 if (!requireNamespace("lme4", quietly = TRUE)) {
   stop(
     "缺少 lme4 包。请先运行：\n",
@@ -34,7 +34,7 @@ if (!requireNamespace("lme4", quietly = TRUE)) {
 }
 
 # ============================================================================
-# 0. 路径
+
 # ============================================================================
 
 base_dir <- Sys.getenv("PERSONA_DATA_ROOT", unset = file.path(getwd(), "data", "raw"))
@@ -78,7 +78,7 @@ if (!file.exists(summary_path)) {
 }
 
 # ============================================================================
-# 1. 分析设置
+
 # ============================================================================
 
 TRAITS <- c(
@@ -123,8 +123,8 @@ MODEL_ORDER <- c(
   "Phi-3-medium"
 )
 
-# 这些模型将始终从真实原始数据重新计算，
-# 不再使用 summary CSV 中可能存在的旧占位值。
+
+
 MODEL_FILES <- c(
   "Qwen-2.5-14B" =
     "simulation_output_flattened-qwen2.5-14b-instruct.csv",
@@ -140,7 +140,7 @@ MODEL_FILES <- c(
 )
 
 # ============================================================================
-# 2. 模型名称标准化
+
 # ============================================================================
 
 standardize_group <- function(x) {
@@ -246,7 +246,7 @@ standardize_group <- function(x) {
 }
 
 # ============================================================================
-# 3. 可靠性计算函数
+
 # ============================================================================
 
 calculate_reliability <- function(
@@ -271,7 +271,7 @@ calculate_reliability <- function(
     ) %>%
     ungroup()
 
-  # 数据太少时无法稳定估计
+  
   if (nrow(temp_data) < 100) {
     warning(
       "数据量不足：",
@@ -284,7 +284,7 @@ calculate_reliability <- function(
     return(NA_real_)
   }
 
-  # 情境变量没有方差时无法估计随机斜率
+  
   sigma_x2 <- var(
     temp_data[[situation_var]],
     na.rm = TRUE
@@ -415,7 +415,7 @@ calculate_reliability <- function(
 }
 
 # ============================================================================
-# 4. 从真实模型 CSV 计算完整的 5 × 8 可靠性
+
 # ============================================================================
 
 calculate_model_file <- function(
@@ -537,7 +537,7 @@ calculate_model_file <- function(
 }
 
 # ============================================================================
-# 5. 读取原汇总表
+
 # ============================================================================
 
 df_summary <- read.csv(
@@ -579,14 +579,14 @@ df_summary <- df_summary %>%
   )
 
 # ============================================================================
-# 6. 强制从真实 CSV 重算 MODEL_FILES 中的模型
+
 # ============================================================================
 
 models_to_recalculate <- names(
   MODEL_FILES
 )
 
-# 逐个真实计算，包括 Phi-medium
+
 real_results <- bind_rows(
   lapply(
     models_to_recalculate,
@@ -599,8 +599,8 @@ real_results <- bind_rows(
   )
 )
 
-# 删除汇总表中这些模型的旧记录/占位记录，
-# 再用真实计算结果覆盖。
+
+
 df <- df_summary %>%
   filter(
     !Group %in% models_to_recalculate
@@ -633,7 +633,7 @@ df <- df_summary %>%
     .groups = "drop"
   )
 
-# 单独验证 Phi-medium 确实来自真实数据
+
 phi_medium_check <- df %>%
   filter(
     Group == "Phi-3-medium"
@@ -661,7 +661,7 @@ cat(
   " / 40 个有效可靠性值。\n"
 )
 
-# 可选：保存更新后的完整可靠性结果
+
 updated_summary_path <- file.path(
   output_dir,
   "calculated_reliability_results_with_real_phi_medium.csv"
@@ -681,7 +681,7 @@ cat(
 )
 
 # ============================================================================
-# 7. 构造完整作图网格
+
 # ============================================================================
 
 grid_template <- expand.grid(
@@ -723,7 +723,7 @@ df_plot <- grid_template %>%
     )
   )
 
-# 检查每个模型的真实覆盖情况
+
 coverage_check <- df_plot %>%
   group_by(Group) %>%
   summarise(
@@ -738,7 +738,7 @@ print(
   coverage_check
 )
 
-# Phi-medium 必须有真实数据，不能是占位
+
 phi_plot_coverage <- coverage_check %>%
   filter(
     Group == "Phi-3-medium"
@@ -755,7 +755,7 @@ if (
 }
 
 # ============================================================================
-# 8. 单模型热力图
+
 # ============================================================================
 
 create_heatmap <- function(
@@ -772,8 +772,8 @@ create_heatmap <- function(
     is.finite(sub_data$reliability)
   )
 
-  # 不再制作模型级别的占位面板。
-  # 如果整个模型都没有真实结果，直接终止并提示。
+  
+  
   if (valid_cell_count == 0) {
     stop(
       "模型 ",
@@ -874,7 +874,7 @@ create_heatmap <- function(
 }
 
 # ============================================================================
-# 9. 拼图与保存
+
 # ============================================================================
 
 render_heatmap_layout <- function(
@@ -895,8 +895,8 @@ render_heatmap_layout <- function(
     p
   })
 
-  # 只有布局槽位数大于模型数时才添加纯空白 spacer；
-  # 不会再把 Phi-medium 替换成占位图。
+  
+  
   if (total_slots > length(plot_list)) {
     plot_list <- c(
       plot_list,
@@ -975,7 +975,7 @@ render_heatmap_layout <- function(
 }
 
 # ============================================================================
-# 10. 默认输出
+
 # ============================================================================
 
 if (

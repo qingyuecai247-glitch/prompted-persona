@@ -34,8 +34,8 @@ TRAIT_NAMES = {
 }
 SITUATION_DIMS = ("dut", "int", "adv", "mat", "pos", "neg", "dec", "soc")
 
-# ======================== 服务器路径与默认参数 ========================
-# 如果你的 SAE 或数据目录名称不同，只需要修改这里。
+
+
 DEFAULT_CONFIG = {
     "project": {
         "seed": 42,

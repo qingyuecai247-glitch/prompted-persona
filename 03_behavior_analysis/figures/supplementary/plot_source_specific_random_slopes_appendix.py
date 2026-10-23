@@ -47,8 +47,8 @@ warnings.filterwarnings("ignore")
 # 1. Paths
 # ============================================================
 
-# 如果 csv 和脚本在同一目录，保持这个即可
-# 否则改成你的实际路径，例如：
+
+
 # RANDOM_SLOPES_CSV = r"./local_assets/random_slopes_8sources.csv"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RANDOM_SLOPES_CSV = str(
