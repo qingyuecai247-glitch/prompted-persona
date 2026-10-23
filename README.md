@@ -82,3 +82,7 @@ The demo uses48 wholly synthetic observations from12 simulated people. Study obs
 - docs/: paper-to-code map and environment/configuration notes.
 
 Human source: Kuper et al.(2024), https://doi.org/10.1037/pspp0000473 ; https://osf.io/4ps29/ . Third-party terms apply. Set service credentials and local assets yourself; no private server configuration is included. A project-wide code license remains pending author approval (LICENSE_NOTICE.md).
+
+## BFI-2 scoring
+
+Full60-item domain scoring is shared by the generation clients. See [scoring instructions](docs/BFI2_SCORING.md). Existing item-level CSVs can be rescored with generation/score_bfi2.py.

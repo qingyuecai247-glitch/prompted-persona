@@ -2,6 +2,11 @@ import os
 from pathlib import Path
 
 REPO_ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "config/paths.json").is_file())
+import sys
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from generation.bfi2 import DOMAIN_ITEMS as BIG5_DIM_MAP, REVERSE_ITEMS, DOMAIN_LABELS, coerce_answer, score_bfi2
+
 GENERATION_DATA = Path(os.environ.get("PERSONA_GENERATION_DATA", REPO_ROOT / "data/raw"))
 GENERATION_OUTPUT = Path(os.environ.get("PERSONA_GENERATION_OUTPUT", REPO_ROOT / "outputs/generation"))
 
@@ -16,15 +21,7 @@ BIG_FIVE_PATH = str(GENERATION_DATA / "big_five.txt")
 OUTPUT_CSV = str(GENERATION_OUTPUT / "big_five_results_test.csv")
 REPEAT = int(os.environ.get("PERSONA_BIG5_REPEATS", "5"))
 
-BIG5_DIM_MAP = {
-    "O": [5, 10, 15, 20, 25, 30],      # Openness
-    "C": [3, 8, 13, 18, 23, 28, 33],   # Conscientiousness
-    "E": [1, 6, 11, 16, 21, 26, 31],   # Extraversion
-    "A": [2, 7, 12, 17, 22, 27, 32],   # Agreeableness
-    "N": [4, 9, 14, 19, 24, 29, 34],   # Neuroticism
-}
 
-REVERSE_ITEMS = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 29, 30, 32, 34}
 
 BIG5_TRAIT_CN = {"O": "开放性", "C": "责任心", "E": "外向性", "A": "宜人性", "N": "神经质"}
 
@@ -36,6 +33,8 @@ def load_big_five_questions(path):
             if line:
                 idx, q = line.split('.', 1)
                 questions.append(q.strip())
+    if len(questions) != 60:
+        raise ValueError("The BFI-2 scorer requires the complete ordered 60-item questionnaire")
     return questions
 
 def call_llm(system_prompt, user_prompt, max_tokens=128, temperature=0.7, top_p=0.9, repetition_penalty=1.1):
@@ -78,22 +77,7 @@ def parse_score(text):
     return None
 
 def calc_big5_traits(scores_dict):
-    """
-    input: {'Q1': 4, 'Q2': 2, ...}
-    output: {'O': 3.57, 'C': 4.0, ...}
-    """
-    trait_scores = {}
-    for trait, idxs in BIG5_DIM_MAP.items():
-        vals = []
-        for i in idxs:
-            key = f"Q{i}"
-            if key in scores_dict and scores_dict[key] is not None and scores_dict[key] != "":
-                score = scores_dict[key]
-                if i in REVERSE_ITEMS:
-                    score = 6 - score
-                vals.append(score)
-        trait_scores[trait] = round(sum(vals) / len(vals), 2) if vals else None
-    return trait_scores
+    return {domain: round(value, 2) for domain, value in score_bfi2(scores_dict).items()}
 
 def test_model_bigfive(REPEAT=5):
     questions = load_big_five_questions(BIG_FIVE_PATH)

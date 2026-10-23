@@ -2,6 +2,11 @@ import os
 from pathlib import Path
 
 REPO_ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "config/paths.json").is_file())
+import sys
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from generation.bfi2 import DOMAIN_ITEMS as BIG5_DIM_MAP, REVERSE_ITEMS, DOMAIN_LABELS, coerce_answer, score_bfi2
+
 GENERATION_DATA = Path(os.environ.get("PERSONA_GENERATION_DATA", REPO_ROOT / "data/raw"))
 GENERATION_OUTPUT = Path(os.environ.get("PERSONA_GENERATION_OUTPUT", REPO_ROOT / "outputs/generation"))
 
@@ -73,14 +78,6 @@ usage_log_file = str(GENERATION_OUTPUT / "usage_log.csv")
 big5_repeat = int(os.environ.get("PERSONA_BIG5_REPEATS", "5"))
 facet_repeat = int(os.environ.get("PERSONA_STATE_REPEATS", "5"))
 
-BIG5_DIM_MAP = {
-    "O": [5, 10, 15, 20, 25, 30],
-    "C": [3, 8, 13, 18, 23, 28, 33],
-    "E": [1, 6, 11, 16, 21, 26, 31],
-    "A": [2, 7, 12, 17, 22, 27, 32],
-    "N": [4, 9, 14, 19, 24, 29, 34],
-}
-REVERSE_ITEMS = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 29, 30, 32, 34}
 
 MODEL_SOURCE = os.environ.get("PERSONA_MODEL_SOURCE", "local")
 LOCAL_LLM_URL = os.environ.get("PERSONA_LLM_URL", "")
@@ -222,39 +219,10 @@ def parse_json_safe(text):
     return {}
 
 def map_big5_scores(answer_json):
-    forward_map = {
-        "Very Inaccurate": 1,
-        "Moderately Inaccurate": 2,
-        "Neither Accurate Nor Inaccurate": 3,
-        "Moderately Accurate": 4,
-        "Very Accurate": 5
-    }
-    scores = {}
-    for q, ans in answer_json.items():
-        # scores[q] = forward_map.get(ans, None)
-        val = forward_map.get(ans, 3 if ans else 3)  
-        scores[q] = val
-    return scores
+    return {item: coerce_answer(value) for item, value in answer_json.items()}
 
 def aggregate_ocean(scores):
-    dims = {"O":[], "C":[], "E":[], "A":[], "N":[]}
-    for dim, q_nums in BIG5_DIM_MAP.items():
-        for qn in q_nums:
-            key = f"Q{qn}"
-            if key in scores:
-                val = scores[key]
-                if val is None or not isinstance(val, (int, float)):
-                    val = 3
-                if qn in REVERSE_ITEMS:
-                    val = 6 - val
-                dims[dim].append(val)
-            else:
-                dims[dim].append(3)
-    return { "Openness": mean(dims["O"]),
-             "Conscientiousness": mean(dims["C"]),
-             "Extraversion": mean(dims["E"]),
-             "Agreeableness": mean(dims["A"]),
-             "Neuroticism": mean(dims["N"]) }
+    return {DOMAIN_LABELS[domain]: value for domain, value in score_bfi2(scores).items()}
 
 # prompt
 def prompt_big5(persona_desc, questions):
@@ -295,6 +263,8 @@ def run_simulation():
     ensure_result_dir()
     personas = load_personas(csv_path)
     big5_questions = load_list(big5_questions_path)
+    if len(big5_questions) != 60:
+        raise ValueError("The BFI-2 scorer requires the complete ordered 60-item questionnaire")
     situations_dict = load_json(situation_path)
     situations = list(situations_dict.items())
     facet_questions = load_json(facet_questions_path)
