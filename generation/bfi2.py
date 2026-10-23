@@ -9,6 +9,15 @@ KEY = json.loads((ROOT / "config/bfi2_scoring.json").read_text())
 DOMAIN_ITEMS = KEY["domains"]
 REVERSE_ITEMS = frozenset(KEY["reverse_items"])
 DOMAIN_LABELS = KEY["domain_labels"]
+
+if set(DOMAIN_ITEMS) != {"E", "A", "C", "N", "O"}:
+    raise ValueError("BFI-2 key must contain exactly five domains")
+if any(len(items) != 12 for items in DOMAIN_ITEMS.values()):
+    raise ValueError("BFI-2 key must include 12 items per domain")
+if sorted(item for items in DOMAIN_ITEMS.values() for item in items) != list(range(1, 61)):
+    raise ValueError("BFI-2 key must cover Q1--Q60 exactly once")
+if not REVERSE_ITEMS.issubset(set(range(1, 61))):
+    raise ValueError("BFI-2 reverse keys must refer to Q1--Q60")
 LABELS = {
     "very inaccurate": 1.0,
     "moderately inaccurate": 2.0,

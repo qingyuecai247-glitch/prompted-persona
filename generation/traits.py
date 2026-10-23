@@ -5,7 +5,7 @@ REPO_ROOT = next(parent for parent in Path(__file__).resolve().parents if (paren
 import sys
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
-from generation.bfi2 import DOMAIN_ITEMS as BIG5_DIM_MAP, REVERSE_ITEMS, DOMAIN_LABELS, coerce_answer, score_bfi2
+from generation.bfi2 import score_bfi2
 
 GENERATION_DATA = Path(os.environ.get("PERSONA_GENERATION_DATA", REPO_ROOT / "data/raw"))
 GENERATION_OUTPUT = Path(os.environ.get("PERSONA_GENERATION_OUTPUT", REPO_ROOT / "outputs/generation"))

@@ -46,3 +46,11 @@ No inference or data regeneration is launched by installation, tests or the stat
 ## Full BFI-2 scoring
 
 Both questionnaire generators now use generation/bfi2.py with the60-item key in config/bfi2_scoring.json. See docs/BFI2_SCORING.md for response validation, the item-level CSV rescoring command and version provenance.
+
+## Maintained generation entry point
+
+`responses.py` is the only maintained situation-conditioned response generator. It always uses the complete60-item BFI-2 scorer; there is no abbreviated-scoring mode or alternative generation version in this directory. `bfi2.py` is its shared scoring module, not a second generation pipeline. `traits.py` is a separate baseline-assessment stage using the same full key. `score_bfi2.py` only rescores existing item-level CSVs and does not generate model responses.
+
+```sh
+python run.py generate-responses
+```

@@ -15,6 +15,21 @@ def load_generator():
     return module
 
 class GenerationConfiguration(unittest.TestCase):
+    def test_existing_generator_uses_late_items_in_full_scoring(self):
+        module = load_generator()
+        answers = {f"Q{i}": "Neither Accurate Nor Inaccurate" for i in range(1, 61)}
+        answers["Q60"] = "Very Accurate"
+        answers["Q58"] = "Very Accurate"
+        scores = module.aggregate_ocean(module.map_big5_scores(answers))
+        self.assertAlmostEqual(scores["Openness"], 3 + 2/12)
+        self.assertAlmostEqual(scores["Conscientiousness"], 3 - 2/12)
+
+    def test_existing_generator_rejects_incomplete_baseline(self):
+        module = load_generator()
+        answers = {f"Q{i}": 3 for i in range(1, 60)}
+        with self.assertRaisesRegex(ValueError, "Q60"):
+            module.aggregate_ocean(answers)
+
     def test_missing_local_endpoint_fails_before_request(self):
         module = load_generator()
         with patch.object(module.requests, 'post') as post:
