@@ -1,0 +1,5 @@
+# Client dependencies; install GPU serving dependencies separately.
+pandas>=2.2,<4
+requests>=2.31,<3
+tqdm>=4.66,<5
+openai>=1,<3

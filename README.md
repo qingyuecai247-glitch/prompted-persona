@@ -49,8 +49,14 @@ python -m unittest discover -s tests -p test_figure2_cluster.py -v
 
 The example contains48 synthetic observations from12 simulated people and writes outputs/demo_cluster/summary.json. It is an illustration of clustered mean uncertainty.
 
+## LLM data generation
+
+Persona construction and assessment are in [01_persona](01_persona/README.md). Situation-conditioned response generation, local model serving and optional description preprocessing are in [02_behavior_generation](02_behavior_generation/README.md). Install requirements-generation.txt for clients; GPU serving has separate requirements. Endpoints, credentials and input/output paths are configured by environment variables.
+
 ## Organization
 
+- 01_persona/: persona construction and assessment.
+- 02_behavior_generation/: response generation and supporting tools.
 - 03_behavior_analysis/: main and Supplementary statistical analyses and plots.
 - 04_sae/: formal representation and intervention analyses.
 - scripts/: command-line wrappers, example and figure export.

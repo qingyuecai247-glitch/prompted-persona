@@ -1,0 +1,6 @@
+# Select mutually compatible CUDA/PyTorch/vLLM builds for the target GPU.
+vllm
+transformers
+torch
+fastapi
+uvicorn
